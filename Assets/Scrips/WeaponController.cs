@@ -17,15 +17,24 @@ public class WeaponController : MonoBehaviour
     [Header("Shoot Parametrs")]
     public float fireRange = 200;
     public float recoilForce = 4f; // Fuerza de retroceso del arma
+    public float fireRate = 0.6f;
+    public int maxAmmo = 8;
+
+    public int currentAmmo { get; private set; }
+
+    private float LasTimeShoot = Mathf.NegativeInfinity;
 
     [Header("Sounds & Visuals")]
     public GameObject flashEffect;
-    
-    private void Update()
-    {
-        HandlShoot();
 
-        transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * 5f);
+
+    [Header ("Reload Parameters")]
+    public float reloadTime = 1.5f;
+
+
+    private void Awake()
+    {
+        currentAmmo = maxAmmo;
     }
 
 
@@ -33,10 +42,42 @@ public class WeaponController : MonoBehaviour
     {
         cameraPlayerTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
-    private void HandlShoot()
+
+    private void Update()
     {
         if (Input.GetButtonDown("Fire1"))
         {
+            TryShoot();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(Reload());
+        }
+
+
+        transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * 5f);
+    }
+
+    private bool TryShoot()
+    {
+
+        if (LasTimeShoot + fireRate < Time.time)
+        {
+            if (currentAmmo >= 1)
+            {
+                HandlShoot();
+                currentAmmo -= 1;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void HandlShoot()
+    {
+        
+        
 
            GameObject flashClone = Instantiate(flashEffect, weaponMuzzle.position, Quaternion.Euler(weaponMuzzle.forward),transform);
             Destroy(flashClone, 1f);
@@ -47,8 +88,11 @@ public class WeaponController : MonoBehaviour
                 GameObject bulletHoleCLone = Instantiate(bulletHolePrefab, hit.point + hit.normal * 0.001f, Quaternion.LookRotation(hit.normal));
                 Destroy(bulletHoleCLone, 4f);
             }
+
+
+         LasTimeShoot = Time.time;
             
-        }
+        
     }
 
     private void AddRecoil()
@@ -57,6 +101,14 @@ public class WeaponController : MonoBehaviour
         transform.position = transform.position - transform.forward * (recoilForce / 50f);
     }
 
+
+    IEnumerator Reload()
+    {
+        Debug.Log("Recargando...");
+        yield return new WaitForSeconds(reloadTime);
+        currentAmmo = maxAmmo;
+        Debug.Log("recargada");
+    }
 
 }
 

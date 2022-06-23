@@ -133,6 +133,9 @@ MonoBehaviour:
     type: 3}
   fireRange: 200
   recoilForce: 4
+  fireRate: 0.6
+  maxAmmo: 8
+  currentAmmo: 8
   flashEffect: {fileID: 6128367421793746255, guid: 566df7c9361684c4c97c704499ef86f4,
     type: 3}
 --- !u!114 &1617681137523288729
