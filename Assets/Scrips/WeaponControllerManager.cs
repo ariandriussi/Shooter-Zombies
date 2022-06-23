@@ -40,6 +40,7 @@ public class WeaponControllerManager : MonoBehaviour
         {
             weaponSlots[p_weaponIndex].gameObject.SetActive(true);
             activeWeaponIndex = p_weaponIndex;
+            EventManager.current.newGunEvent.Invoke();
         }
     }
 
@@ -55,6 +56,8 @@ public class WeaponControllerManager : MonoBehaviour
                 WeaponController weaponClone = Instantiate(p_weaponPrefab, weaponParentSocket);
                 weaponClone.owner = gameObject;
                 weaponClone.gameObject.SetActive(false);
+
+               
 
                 weaponSlots[i] = weaponClone;
                 return;
