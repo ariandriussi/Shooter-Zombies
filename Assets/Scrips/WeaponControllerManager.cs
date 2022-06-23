@@ -53,6 +53,7 @@ public class WeaponControllerManager : MonoBehaviour
             if (weaponSlots[i] == null)
             {
                 WeaponController weaponClone = Instantiate(p_weaponPrefab, weaponParentSocket);
+                weaponClone.owner = gameObject;
                 weaponClone.gameObject.SetActive(false);
 
                 weaponSlots[i] = weaponClone;

@@ -31,6 +31,8 @@ public class WeaponController : MonoBehaviour
     [Header ("Reload Parameters")]
     public float reloadTime = 1.5f;
 
+    public GameObject owner { set; get; }
+
 
     private void Awake()
     {
@@ -82,13 +84,19 @@ public class WeaponController : MonoBehaviour
            GameObject flashClone = Instantiate(flashEffect, weaponMuzzle.position, Quaternion.Euler(weaponMuzzle.forward),transform);
             Destroy(flashClone, 1f);
             AddRecoil();
-            RaycastHit hit;
-         if (Physics.Raycast(cameraPlayerTransform.position, cameraPlayerTransform.forward, out hit, fireRange, hittableLayers))
+      
+
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(cameraPlayerTransform.position, cameraPlayerTransform.forward, fireRange, hittableLayers);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject != owner)
             {
                 GameObject bulletHoleCLone = Instantiate(bulletHolePrefab, hit.point + hit.normal * 0.001f, Quaternion.LookRotation(hit.normal));
                 Destroy(bulletHoleCLone, 4f);
             }
-
+        }
 
          LasTimeShoot = Time.time;
             
