@@ -10,6 +10,8 @@ public class WeaponControllerManager : MonoBehaviour
     public Transform defaultWeaponPosition;
     public Transform aimingPosition;
 
+ 
+
     public int activeWeaponIndex { get; private set; }
 
     private WeaponController[] weaponSlots = new WeaponController[2];
@@ -38,7 +40,7 @@ public class WeaponControllerManager : MonoBehaviour
 
     private void SwitchWeapon()
     {
-
+        
        
         int tempIndex = (activeWeaponIndex + 1) % weaponSlots.Length;
 
