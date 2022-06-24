@@ -131,13 +131,14 @@ MonoBehaviour:
     m_Bits: 4294967295
   bulletHolePrefab: {fileID: 2351476897651248150, guid: 904ae76169365d8448e9a44d26faff25,
     type: 3}
+  shootType: 1
   fireRange: 200
   recoilForce: 4
   fireRate: 0.6
-  maxAmmo: 8
-  currentAmmo: 8
+  maxAmmo: 10
   flashEffect: {fileID: 6128367421793746255, guid: 566df7c9361684c4c97c704499ef86f4,
     type: 3}
+  reloadTime: 1.5
 --- !u!114 &1617681137523288729
 MonoBehaviour:
   m_ObjectHideFlags: 0
