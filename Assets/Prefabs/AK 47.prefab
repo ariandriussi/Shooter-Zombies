@@ -218,6 +218,8 @@ MonoBehaviour:
     m_Bits: 4294967295
   bulletHolePrefab: {fileID: 2351476897651248150, guid: 904ae76169365d8448e9a44d26faff25,
     type: 3}
+  weaponImg: {fileID: 3511474570238504873, guid: 554f4353b0a8885488a331b3a43654e8,
+    type: 3}
   shootType: 1
   fireRange: 300
   recoilForce: 1.4

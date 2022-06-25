@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ShootType
 {
@@ -19,6 +20,7 @@ public class WeaponController : MonoBehaviour
     Transform cameraPlayerTransform;
     public LayerMask hittableLayers;
     public GameObject bulletHolePrefab;
+ 
 
     [Header("Shoot Parametrs")]
     public ShootType shootType;

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 [Serializable]
@@ -9,7 +10,7 @@ using TMPro;
 public class WeaponInfo_UI : MonoBehaviour
 {
     public TMP_Text currentBullets, totalBullets;
-
+  
 
     private void OnEnable()
     {
@@ -33,6 +34,8 @@ public class WeaponInfo_UI : MonoBehaviour
         }
         currentBullets.text = newCurrentBullets.ToString();
         totalBullets.text = newTotalBullets.ToString();
+     
+
 
     }
 }
