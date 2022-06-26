@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
 
 
 
+    // Variables componentes
+
+    private Animator animator;
     new Rigidbody rigidbody;
 
     //variables camara
@@ -24,13 +27,14 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-
+        animator = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         rigidbody = GetComponent<Rigidbody>();
+       
         distanceToGround = GetComponent<Collider>().bounds.extents.y;
 
 
@@ -39,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+       
     }
 
 
@@ -47,7 +51,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-
+        Move();
 
         Jump();
 
@@ -79,6 +83,9 @@ public class PlayerController : MonoBehaviour
         }
         velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = velocity;
+
+        animator.SetFloat("velX", horizontal);
+        animator.SetFloat("velY", vertical);
 
     }
 
