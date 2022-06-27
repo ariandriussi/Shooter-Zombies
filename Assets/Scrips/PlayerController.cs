@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        
         rigidbody = GetComponent<Rigidbody>();
        
         distanceToGround = GetComponent<Collider>().bounds.extents.y;
@@ -50,12 +50,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.current.currentGameState == GameState.inGame)
+        {
+            Move();
 
-        Move();
+            Jump();
 
-        Jump();
+            Look();
 
-        Look();
+        }
+
+     
 
 
     }
