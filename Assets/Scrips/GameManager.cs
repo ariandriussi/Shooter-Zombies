@@ -26,6 +26,14 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
+    PlayerController controller;
+
+    public void Start()
+    {
+        controller = GameObject.Find("Player").GetComponent<PlayerController>();
+    }
+
     public GameState currentGameState = GameState.inMenu;
 
     private void Update()
@@ -109,7 +117,7 @@ public class GameManager : MonoBehaviour
 
        else if (newGameState == GameState.InGameOver)
         {
-
+            controller.Died();
         }
 
 

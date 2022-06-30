@@ -7,6 +7,8 @@ public class ManagerHUD : MonoBehaviour
     public GameObject weaponInfoPrefab;
 
 
+
+
     private void Start()
     {
         EventManager.current.newGunEvent.AddListener(CreateWeaponInfo);

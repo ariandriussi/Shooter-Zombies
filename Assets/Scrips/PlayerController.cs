@@ -12,6 +12,13 @@ public class PlayerController : MonoBehaviour
     public int forceJump = 10;
 
 
+    // Variables vida
+
+    public int maxHealth { get; private set; }
+    public int currentHealth { get; private set; }
+    public float healthRange { get { return (float)currentHealth / (float)maxHealth; } }
+
+    public PlayerStatus_UI playerStatus;
 
 
     // Variables componentes
@@ -31,7 +38,12 @@ public class PlayerController : MonoBehaviour
     }
     // Start is called before the first frame update
     void Start()
+
+       
     {
+
+        maxHealth = 100;
+        currentHealth = maxHealth;
         
         rigidbody = GetComponent<Rigidbody>();
        
@@ -41,10 +53,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
-    {
-       
-    }
+
 
 
     // Update is called once per frame
@@ -60,11 +69,29 @@ public class PlayerController : MonoBehaviour
 
         }
 
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            takeDamage(10);
+        }
+
      
 
 
     }
 
+
+    public void takeDamage(int damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        playerStatus.SetHealth(healthRange);
+
+        if (currentHealth <= 0)
+        {
+            Died();
+        }
+    }
     private bool IsGrounded()
     {
         return Physics.BoxCast(this.transform.position, new Vector3(0.4f, 0f, 0.4f), Vector3.down, Quaternion.identity, distanceToGround + 0.1f);
@@ -115,6 +142,13 @@ public class PlayerController : MonoBehaviour
         camPlayer.transform.localRotation = Quaternion.Euler(-cameraVertical, 0f, 0f);
 
 
+    }
+
+
+   public void Died()
+    {
+        Debug.Log("personaje muere");
+        GameManager.current.currentGameState = GameState.InGameOver;
     }
 
 }

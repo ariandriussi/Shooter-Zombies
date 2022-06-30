@@ -32,5 +32,6 @@ public class EventManager : MonoBehaviour
 
     public Int2Event updateBulletsEvents = new Int2Event();
     public UnityEvent newGunEvent = new UnityEvent();
+   
 
 }
