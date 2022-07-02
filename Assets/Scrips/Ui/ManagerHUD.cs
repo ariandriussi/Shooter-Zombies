@@ -9,13 +9,16 @@ public class ManagerHUD : MonoBehaviour
 
 
 
+
     private void Start()
     {
         EventManager.current.newGunEvent.AddListener(CreateWeaponInfo);
+
     }
 
     public void CreateWeaponInfo()
     {
         Instantiate(weaponInfoPrefab, transform);
     }
+
 }

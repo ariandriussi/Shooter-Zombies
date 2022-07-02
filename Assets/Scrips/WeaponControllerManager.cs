@@ -27,6 +27,8 @@ public class WeaponControllerManager : MonoBehaviour
         }
 
         SwitchWeapon();
+
+
     }
 
     // Update is called once per frame

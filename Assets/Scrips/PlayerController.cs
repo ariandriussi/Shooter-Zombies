@@ -8,15 +8,22 @@ public class PlayerController : MonoBehaviour
 
 
     // Variables player
-    public int playerRunning = 10;
+    public float playerRunning = 10;
+    public float RUNNING_FORCE = 2f;
     public int forceJump = 10;
 
 
-    // Variables vida
+    // Variables vida y energia
 
     public int maxHealth { get; private set; }
     public int currentHealth { get; private set; }
     public float healthRange { get { return (float)currentHealth / (float)maxHealth; } }
+
+    public float maxEnergy { get; private set; }
+
+    public float currentEnergy;
+    
+    public float energyRange { get { return (float)currentEnergy / (float)maxEnergy; } }
 
     public PlayerStatus_UI playerStatus;
 
@@ -44,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
         maxHealth = 100;
         currentHealth = maxHealth;
+        maxEnergy = 100;
+        currentEnergy = maxEnergy;
         
         rigidbody = GetComponent<Rigidbody>();
        
@@ -61,22 +70,39 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.current.currentGameState == GameState.inGame)
         {
-            Move();
+            if (Input.GetKey(KeyCode.LeftShift) && IsGrounded())
+            {
+                Move(true);
+
+            }
+
+            else
+            {
+
+                
+                Move(false);
+              
+            }
+
 
             Jump();
 
             Look();
 
+
+           
         }
+
+
 
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            takeDamage(10);
+            takeDamage(5);
         }
 
      
-
+    
 
     }
 
@@ -91,6 +117,30 @@ public class PlayerController : MonoBehaviour
         {
             Died();
         }
+
+       
+    }
+
+
+    public void Energy(float decrease)
+    {
+        currentEnergy -= decrease;
+        currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
+        playerStatus.SetEnergy(energyRange);
+
+    }
+
+
+    public void IncreaseLife(float IncreaseEnergy)
+    {
+        if (currentEnergy < maxEnergy)
+        {
+            currentEnergy += IncreaseEnergy;
+            playerStatus.SetEnergy(energyRange);
+
+            
+        }
+        
     }
     private bool IsGrounded()
     {
@@ -98,12 +148,28 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void Move()
+    private void Move(bool Isrunning)
     {
 
+        float runningSpeedFactor = playerRunning;
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
+
+        if (Isrunning && currentEnergy > 0 && vertical == 1)
+        {
+
+
+            Energy(0.5f);
+            runningSpeedFactor *= RUNNING_FORCE;
+        }
+
+
+        if (!Isrunning)
+        {
+            IncreaseLife(1f);
+        }
+     
 
         Vector3 velocity = Vector3.zero;
 
@@ -111,7 +177,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 dirrection = (transform.forward * vertical + transform.right * horizontal).normalized;
 
-            velocity = dirrection * playerRunning;
+            velocity = dirrection * runningSpeedFactor;
         }
         velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = velocity;
