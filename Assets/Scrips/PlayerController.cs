@@ -15,17 +15,19 @@ public class PlayerController : MonoBehaviour
 
     // Variables vida y energia
 
-    public int maxHealth { get; private set; }
-    public int currentHealth { get; private set; }
-    public float healthRange { get { return (float)currentHealth / (float)maxHealth; } }
+    public int MaxHealth { get; private set; }
+    public int CurrentHealth { get; private set; }
+    public float HealthRange { get { return (float)CurrentHealth / (float)MaxHealth; } }
 
-    public float maxEnergy { get; private set; }
+    public float MaxEnergy { get; private set; }
 
-    public float currentEnergy;
+    public float CurrentEnergy { get; private set; }
     
-    public float energyRange { get { return (float)currentEnergy / (float)maxEnergy; } }
+    public float EnergyRange { get { return (float)CurrentEnergy / (float)MaxEnergy; } }
 
     public PlayerStatus_UI playerStatus;
+
+    
 
 
     // Variables componentes
@@ -49,10 +51,10 @@ public class PlayerController : MonoBehaviour
        
     {
 
-        maxHealth = 100;
-        currentHealth = maxHealth;
-        maxEnergy = 100;
-        currentEnergy = maxEnergy;
+        MaxHealth = 100;
+        CurrentHealth = MaxHealth;
+        MaxEnergy = 100;
+        CurrentEnergy = MaxEnergy;
         
         rigidbody = GetComponent<Rigidbody>();
        
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.current.currentGameState == GameState.inGame)
         {
-            if (Input.GetKey(KeyCode.LeftShift) && IsGrounded())
+            if (Input.GetButton("SuperRunning") && IsGrounded())
             {
                 Move(true);
 
@@ -98,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            takeDamage(5);
+            TakeDamage(5);
         }
 
      
@@ -107,13 +109,13 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public void takeDamage(int damage)
+    public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        playerStatus.SetHealth(healthRange);
+        CurrentHealth -= damage;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
+        playerStatus.SetHealth(HealthRange);
 
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
             Died();
         }
@@ -124,19 +126,19 @@ public class PlayerController : MonoBehaviour
 
     public void Energy(float decrease)
     {
-        currentEnergy -= decrease;
-        currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
-        playerStatus.SetEnergy(energyRange);
+        CurrentEnergy -= decrease;
+        CurrentEnergy = Mathf.Clamp(CurrentEnergy, 0, MaxEnergy);
+        playerStatus.SetEnergy(EnergyRange);
 
     }
 
 
-    public void IncreaseLife(float IncreaseEnergy)
+    public void IncreaseEnergy(float IncreaseEnergy)
     {
-        if (currentEnergy < maxEnergy)
+        if (CurrentEnergy < MaxEnergy)
         {
-            currentEnergy += IncreaseEnergy;
-            playerStatus.SetEnergy(energyRange);
+            CurrentEnergy += IncreaseEnergy;
+            playerStatus.SetEnergy(EnergyRange);
 
             
         }
@@ -156,18 +158,18 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
 
-        if (Isrunning && currentEnergy > 0 && vertical == 1)
+        if (Isrunning && CurrentEnergy > 0 && vertical == 1)
         {
 
 
-            Energy(0.5f);
+            Energy(0.3f);
             runningSpeedFactor *= RUNNING_FORCE;
         }
 
 
         if (!Isrunning)
         {
-            IncreaseLife(1f);
+            IncreaseEnergy(0.2f);
         }
      
 

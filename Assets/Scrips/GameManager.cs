@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
+
+    public int DefeatedEnemgys;
     PlayerController controller;
 
     public void Start()

@@ -102,13 +102,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1745458612504260116}
-  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.9999996, y: 0, z: 0, w: -0.0009598614}
   m_LocalPosition: {x: -0.0049, y: 0.0196, z: -0.9138}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2524271361720064749}
   m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -180.11, y: 0, z: 0}
 --- !u!1 &2901395412763295831
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,9 +218,10 @@ MonoBehaviour:
     m_Bits: 4294967295
   bulletHolePrefab: {fileID: 2351476897651248150, guid: 904ae76169365d8448e9a44d26faff25,
     type: 3}
-  weaponImg: {fileID: 3511474570238504873, guid: 554f4353b0a8885488a331b3a43654e8,
+  BulletModel: {fileID: 4730459476817910264, guid: e50819ecd15fdf1448c6a69fd3309aae,
     type: 3}
   shootType: 1
+  fireForce: 1000
   fireRange: 300
   recoilForce: 1.4
   fireRate: 0.1

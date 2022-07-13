@@ -12,22 +12,22 @@ public class WeaponControllerManager : MonoBehaviour
 
  
 
-    public int activeWeaponIndex { get; private set; }
+    public int ActiveWeaponIndex { get; private set; }
 
     private WeaponController[] weaponSlots = new WeaponController[2];
 
     // Start is called before the first frame update
     void Start()
     {
-        activeWeaponIndex = -1;
+        ActiveWeaponIndex = -1;
 
         foreach (WeaponController startingWeapon in startingWeapons)
         {
             AddWeapon(startingWeapon);
         }
 
-        SwitchWeapon();
-
+        EventManager.current.newGunEvent.Invoke();
+        SwitchWeapon(0);
 
     }
 
@@ -36,15 +36,20 @@ public class WeaponControllerManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SwitchWeapon();
+            SwitchWeapon(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SwitchWeapon(1);
         }
     }
 
-    private void SwitchWeapon()
+    private void SwitchWeapon(int index)
     {
-        
-       
-        int tempIndex = (activeWeaponIndex + 1) % weaponSlots.Length;
+
+     
+        int tempIndex = index;
 
         if (weaponSlots[tempIndex] == null) { return; }
           
@@ -54,7 +59,7 @@ public class WeaponControllerManager : MonoBehaviour
             if (weapon != null) { weapon.gameObject.SetActive(false); }
         }
             weaponSlots[tempIndex].gameObject.SetActive(true);
-        activeWeaponIndex = tempIndex;
+        ActiveWeaponIndex = tempIndex;
         EventManager.current.newGunEvent.Invoke();
     }
 
@@ -68,7 +73,7 @@ public class WeaponControllerManager : MonoBehaviour
             if (weaponSlots[i] == null)
             {
                 WeaponController weaponClone = Instantiate(p_weaponPrefab, weaponParentSocket);
-                weaponClone.owner = gameObject;
+                weaponClone.Owner = gameObject;
                 weaponClone.gameObject.SetActive(false);
 
                

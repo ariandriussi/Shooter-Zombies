@@ -14,16 +14,20 @@ public class WeaponController : MonoBehaviour
     [Header("references")]
 
     public Transform weaponMuzzle;
+
     
     [Header("General")]
 
     Transform cameraPlayerTransform;
     public LayerMask hittableLayers;
     public GameObject bulletHolePrefab;
+    public GameObject BulletModel;
+    
  
 
     [Header("Shoot Parametrs")]
     public ShootType shootType;
+    public float fireForce = 2;
     public float fireRange = 200;
     public float recoilForce = 4f; // Fuerza de retroceso del arma
     public float fireRate = 0.6f; // Retraso de cada disparo
@@ -32,8 +36,8 @@ public class WeaponController : MonoBehaviour
    
    int remainingBullets;
 
-    public int currentmagazine { get; set; }
-    public int currentAmmo { get; set; }
+    public int Currentmagazine { get; set; }
+    public int CurrentAmmo { get; set; }
 
     private float LasTimeShoot = Mathf.NegativeInfinity;
 
@@ -44,13 +48,13 @@ public class WeaponController : MonoBehaviour
     [Header ("Reload Parameters")]
     public float reloadTime = 1.5f;
 
-    public GameObject owner { set; get; }
+    public GameObject Owner { set; get; }
 
 
     private void Awake()
     {
-        currentAmmo = maxAmmo;
-        currentmagazine = totalMagazine;
+        CurrentAmmo = maxAmmo;
+        Currentmagazine = totalMagazine;
        
     }
 
@@ -58,18 +62,19 @@ public class WeaponController : MonoBehaviour
     private void Start()
     {
         cameraPlayerTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        
       
     }
 
     private void Update()
     {
 
-        EventManager.current.updateBulletsEvents.Invoke(currentAmmo, currentmagazine);
+        EventManager.current.updateBulletsEvents.Invoke(CurrentAmmo, Currentmagazine);
 
-
+        
         if (Input.GetKeyUp(KeyCode.E))
         {
-            currentmagazine = totalMagazine;
+            Currentmagazine = totalMagazine;
         }
         if (shootType == ShootType.Manual)
         {
@@ -102,12 +107,12 @@ public class WeaponController : MonoBehaviour
 
         if (LasTimeShoot + fireRate < Time.time)
         {
-            if (currentAmmo >= 1)
+            if (CurrentAmmo >= 1)
             {
                 HandlShoot();
-                currentAmmo -= 1;
+                CurrentAmmo -= 1;
                 remainingBullets++;
-                EventManager.current.updateBulletsEvents.Invoke(currentAmmo, currentmagazine);
+                EventManager.current.updateBulletsEvents.Invoke(CurrentAmmo, Currentmagazine);
                 return true;
             }
         }
@@ -119,21 +124,30 @@ public class WeaponController : MonoBehaviour
         
         
 
-           GameObject flashClone = Instantiate(flashEffect, weaponMuzzle.position, Quaternion.Euler(weaponMuzzle.forward),transform);
-            Destroy(flashClone, 1f);
-            AddRecoil();
-      
+      GameObject flashClone = Instantiate(flashEffect, weaponMuzzle.position, Quaternion.Euler(weaponMuzzle.forward),transform);
+       Destroy(flashClone, 1f);
 
+
+
+        IstanceBullet();
+        AddRecoil();
         RaycastHit[] hits;
         hits = Physics.RaycastAll(cameraPlayerTransform.position, cameraPlayerTransform.forward, fireRange, hittableLayers);
+      
 
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.gameObject != owner)
+            if (hit.collider.gameObject != Owner)
             {
+
+              
                 GameObject bulletHoleCLone = Instantiate(bulletHolePrefab, hit.point + hit.normal * 0.001f, Quaternion.LookRotation(hit.normal));
                 Destroy(bulletHoleCLone, 4f);
+
+
             }
+       
+            
         }
 
          LasTimeShoot = Time.time;
@@ -147,28 +161,36 @@ public class WeaponController : MonoBehaviour
         transform.position = transform.position - transform.forward * (recoilForce / 50f);
     }
 
+    public void IstanceBullet()
+    {
+
+        GameObject bulletCLone = Instantiate(BulletModel, weaponMuzzle.position, Quaternion.identity);
+        bulletCLone.GetComponent<Rigidbody>().AddForce(weaponMuzzle.forward*fireForce);
+        Destroy(bulletCLone, 20f);
+    }
+
 
     IEnumerator Reload()
     {
         // si la cantidad de balas intanciadas es mayor a 1 y el cargador de balas es mayor a 0 puede recargar
-        if (remainingBullets >= 1 && currentmagazine > 0)
+        if (remainingBullets >= 1 && Currentmagazine > 0)
         {
             Debug.Log("Recargando...");
             yield return new WaitForSeconds(reloadTime);
-            if (remainingBullets < currentmagazine)
+            if (remainingBullets < Currentmagazine)
             {                                            //En el caso que la cantidad de balas instanciadas sea menor que la cantidad de balas dentro del cargador, cargara el arma completa.
-                currentmagazine -= remainingBullets;
+                Currentmagazine -= remainingBullets;
                 remainingBullets = 0;
-                currentAmmo = maxAmmo;
+                CurrentAmmo = maxAmmo;
             }
             else
             {
-                currentAmmo += currentmagazine;        //En el caso que la cantidad de balas istanciadas sea mayor a la cantidad dentro del cargador, el arma cargara sólo lo que resta en el cargador.
-                currentmagazine = 0;
+                CurrentAmmo += Currentmagazine;        //En el caso que la cantidad de balas istanciadas sea mayor a la cantidad dentro del cargador, el arma cargara sólo lo que resta en el cargador.
+                Currentmagazine = 0;
             }
             
           
-             EventManager.current.updateBulletsEvents.Invoke(currentAmmo, currentmagazine);
+             EventManager.current.updateBulletsEvents.Invoke(CurrentAmmo, Currentmagazine);
             Debug.Log("recargada");
         } 
     }
